@@ -20,12 +20,13 @@ fn main() {
 	output_filename := fp.string('output', `o`, '-', 'filename to write the output to')
 	// Parse remaining parameters
 	input_filename := fp.finalize()?[0] or { '-' }
-	// Read input
-	input_text := input_read(input_filename)
+	// // Read input
+	// input_text := input_read(input_filename)
 	// Generate LLVM IR
 	mut timer := time.StopWatch{}
 	timer.start()
-	output_text := codegen(input_text)
+	// output_text := codegen(input_text)
+	output_text := codegen(input_filename)
 	timer.stop()
 	// Write output
 	output_write(output_filename, output_text)
@@ -33,6 +34,7 @@ fn main() {
 	eprintln('written LLVM IR to "$output_filename" in $timer.elapsed().str()')
 }
 
+/*
 fn input_read(filename string) string {
 	if filename == '-' {
 		return os.get_raw_lines_joined()
@@ -43,10 +45,9 @@ fn input_read(filename string) string {
 	if !os.exists(filename) {
 		panic('"$filename" does not exist')
 	}
-	return os.read_file(filename) or {
-		panic('failed to read "$filename"')
-	}
+	return os.read_file(filename) or { panic('failed to read "$filename"') }
 }
+*/
 
 fn output_write(filename string, text string) {
 	if filename == '-' {
@@ -54,7 +55,5 @@ fn output_write(filename string, text string) {
 		flush_stdout()
 		return
 	}
-	os.write_file(filename, text) or {
-		panic('failed to write "$filename"')
-	}
+	os.write_file(filename, text) or { panic('failed to write "$filename"') }
 }
